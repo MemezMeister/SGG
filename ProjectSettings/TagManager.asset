@@ -9,6 +9,7 @@ TagManager:
   - WireEnd
   - Obstacle
   - Path
+  - Worker
   layers:
   - Default
   - TransparentFX

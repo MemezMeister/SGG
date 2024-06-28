@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour
     public Camera mainCamera;
     public Transform[] miniGamePositions; // Positions for each mini-game
     private int currentMiniGameIndex = 0;
-
+    private float currentTimeLimit;
     private MiniGameUIManager uiManager;
 
     private void Awake()
@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         uiManager = FindObjectOfType<MiniGameUIManager>();
+        currentTimeLimit = initialTimeLimit;
         StartNextMiniGame();
     }
 
@@ -42,7 +43,8 @@ public class GameManager : MonoBehaviour
         else
         {
             Debug.Log("All mini-games completed!");
-            // Handle game completion logic here
+            // Restart the game with a reduced timer
+            RestartMiniGamesWithReducedTime();
         }
     }
 
@@ -54,9 +56,10 @@ public class GameManager : MonoBehaviour
 
     private void StartNextMiniGame()
     {
-
         mainCamera.transform.position = miniGamePositions[currentMiniGameIndex].position;
-        uiManager.SetTimer(initialTimeLimit);
+        uiManager.SetTimer(currentTimeLimit);
+        var currentMiniGame = miniGamePositions[currentMiniGameIndex].GetComponent<IMiniGameManager>();
+        currentMiniGame?.StartGame();
     }
 
     public void LoseLife()
@@ -67,11 +70,26 @@ public class GameManager : MonoBehaviour
         if (lives <= 0)
         {
             Debug.Log("Game Over!");
+            RestartMiniGames();
+        }
+        else
+        {
+            StartCoroutine(DelayedStartNextMiniGame());
         }
     }
-    public interface IMiniGameManager
-{
-    void StartGame();
-    void EndGame();
-}
+
+    private void RestartMiniGamesWithReducedTime()
+    {
+        currentMiniGameIndex = 0;
+        currentTimeLimit = Mathf.Max(1f, currentTimeLimit - 1f); // Reduce the timer but not below 1 second
+        StartNextMiniGame();
+    }
+
+    private void RestartMiniGames()
+    {
+        lives = 3; // Reset lives
+        currentMiniGameIndex = 0;
+        currentTimeLimit = initialTimeLimit; // Reset the time limit
+        StartNextMiniGame();
+    }
 }
