@@ -45,19 +45,19 @@ public class GameManager : MonoBehaviour
         else
         {
             Debug.Log("All mini-games completed!");
-            StartCoroutine(RestartWithDelay()); // Add a delay before restarting with reduced timer
+            StartCoroutine(RestartWithDelay()); 
         }
     }
 
     private IEnumerator DelayedStartNextMiniGame()
     {
-        yield return new WaitForSeconds(2); // 2 seconds delay before starting the next mini-game
+        yield return new WaitForSeconds(2); 
         StartNextMiniGame();
     }
 
     private IEnumerator RestartWithDelay()
     {
-        yield return new WaitForSeconds(2); // 2 seconds delay before restarting
+        yield return new WaitForSeconds(2); /
         ReloadCurrentSceneWithReducedTime();
     }
 
@@ -110,14 +110,14 @@ public class GameManager : MonoBehaviour
     private void ReloadCurrentSceneWithReducedTime()
     {
         currentMiniGameIndex = 0;
-        currentTimeLimit = Mathf.Max(1f, currentTimeLimit - 1f); // Reduce the timer but not below 1 second
+        currentTimeLimit = Mathf.Max(1f, currentTimeLimit - 1f); 
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    private void RestartMiniGames() // Change method to IEnumerator
+    private void RestartMiniGames() 
     {
         currentMiniGameIndex = 0;
-        currentTimeLimit = initialTimeLimit; // Reset the time limit
+        currentTimeLimit = initialTimeLimit; 
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
@@ -129,9 +129,9 @@ public class GameManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        mainCamera = Camera.main; // Re-establish the camera reference
+        mainCamera = Camera.main; 
         uiManager = FindObjectOfType<MiniGameUIManager>();
-        uiManager.SetScore(score); // Restore the score
+        uiManager.SetScore(score); 
         StartNextMiniGame();
     }
 

@@ -7,7 +7,7 @@ public class MiniGame4Manager : MonoBehaviour, IMiniGameManager
     public Transform phoneSpawnPoint;
     public GameObject player;
     public float timeLimit = 10f;
-    public MiniGameUIManager uiManager; // Reference to the UI manager
+    public MiniGameUIManager uiManager;
 
     private GameObject currentPhone;
     private float timer;
@@ -91,8 +91,6 @@ public class MiniGame4Manager : MonoBehaviour, IMiniGameManager
     }
         public void ResetGame()
     {
-        // Reset game logic
-        // Destroy spawned assets and reset any game-specific variables
         foreach (Transform child in transform)
         {
             Destroy(child.gameObject);

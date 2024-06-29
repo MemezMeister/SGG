@@ -138,11 +138,10 @@ public class MiniGame1Manager : MonoBehaviour, IMiniGameManager
 
     public void ResetGame()
     {
-        // Reset game logic
-        // Destroy spawned assets and reset any game-specific variables
+
         Debug.Log("Game reset triggered");
         gameWon = false;
-        StartGame(); // Restart the game logic
+        StartGame(); 
     }
 
     public void StartGame()

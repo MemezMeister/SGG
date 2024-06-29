@@ -95,8 +95,6 @@ public class MiniGame3Manager : MonoBehaviour, IMiniGameManager
     }
         public void ResetGame()
     {
-        // Reset game logic
-        // Destroy spawned assets and reset any game-specific variables
         foreach (Transform child in transform)
         {
             Destroy(child.gameObject);

@@ -9,12 +9,12 @@ public class MiniGame6Manager : MonoBehaviour, IMiniGameManager
     public Transform workerSpawnPoint;
     public GameObject ground;
     public float timeLimit = 10f;
-    public MiniGameUIManager uiManager; // Reference to the UI manager
+    public MiniGameUIManager uiManager; 
 
     private GameObject currentClimbingLatch;
     private GameObject currentWorker;
     private float timer;
-    private bool gameActive = false; // Updated to false
+    private bool gameActive = false; 
     private bool gameOver = false;
 
     void Start()
@@ -31,12 +31,12 @@ public class MiniGame6Manager : MonoBehaviour, IMiniGameManager
 
     void Update()
     {
-        if (!gameActive || gameOver) return; // Updated to only run if game is active and not over
+        if (!gameActive || gameOver) return; 
 
         timer -= Time.deltaTime;
         if (uiManager != null)
         {
-            uiManager.SetTimer(timer); // Update timer in UI
+            uiManager.SetTimer(timer);
         }
         if (timer <= 0)
         {
@@ -46,19 +46,19 @@ public class MiniGame6Manager : MonoBehaviour, IMiniGameManager
 
     public void StartGame()
     {
-        gameActive = true; // Start the game when this method is called
+        gameActive = true;
     }
 
     public void EndGame()
     {
-        gameActive = false; // Implementation for EndGame
+        gameActive = false; 
     }
 
     private void SpawnWorker()
     {
         currentWorker = Instantiate(workerPrefab, workerSpawnPoint.position, Quaternion.identity);
         currentWorker.transform.SetParent(transform);
-        currentWorker.tag = "Worker"; // Ensure the worker is tagged for detection
+        currentWorker.tag = "Worker"; 
     }
 
     private void SpawnClimbingLatch()
@@ -66,7 +66,7 @@ public class MiniGame6Manager : MonoBehaviour, IMiniGameManager
         currentClimbingLatch = Instantiate(climbingLatchPrefab, climbingLatchSpawnPoint.position, Quaternion.identity);
         currentClimbingLatch.transform.SetParent(transform);
 
-        // Ensure the ClimbingLatch script is correctly configured
+     
         ClimbingLatch climbingLatchScript = currentClimbingLatch.GetComponent<ClimbingLatch>();
         if (climbingLatchScript != null)
         {
@@ -80,7 +80,7 @@ public class MiniGame6Manager : MonoBehaviour, IMiniGameManager
 
     public void GameOver(bool won)
     {
-        if (gameOver) return; // Ensure GameOver is only called once
+        if (gameOver) return; 
         gameOver = true;
 
         gameActive = false;
@@ -108,8 +108,6 @@ public class MiniGame6Manager : MonoBehaviour, IMiniGameManager
     }
         public void ResetGame()
     {
-        // Reset game logic
-        // Destroy spawned assets and reset any game-specific variables
         foreach (Transform child in transform)
         {
             Destroy(child.gameObject);
