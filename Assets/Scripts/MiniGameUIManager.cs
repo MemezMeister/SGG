@@ -50,8 +50,20 @@ public class MiniGameUIManager : MonoBehaviour
             UpdateTimerText();
             if (timer <= 0)
             {
-                // Handle timer running out if needed
+                TimerRanOut();
             }
         }
+    }
+
+    private void TimerRanOut()
+    {
+        GameManager.instance.LoseLife(); // Reduce player's life by 1
+        GameManager.instance.MiniGameCompleted(); // Transition to next mini-game
+    }
+
+    public void ResetTimer(float newTimer)
+    {
+        timer = newTimer;
+        UpdateTimerText();
     }
 }

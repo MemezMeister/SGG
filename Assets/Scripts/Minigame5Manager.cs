@@ -86,6 +86,7 @@ public class MiniGame5Manager : MonoBehaviour, IMiniGameManager
         if (won)
         {
             Debug.Log("You won!");
+            GameManager.instance.AddScore(1);
             GameManager.instance.MiniGameCompleted();
         }
         else

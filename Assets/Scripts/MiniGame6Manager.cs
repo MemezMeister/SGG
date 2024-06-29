@@ -87,6 +87,7 @@ public class MiniGame6Manager : MonoBehaviour, IMiniGameManager
         if (won)
         {
             Debug.Log("You won!");
+            GameManager.instance.AddScore(1);
             GameManager.instance.MiniGameCompleted();
         }
         else
@@ -94,6 +95,7 @@ public class MiniGame6Manager : MonoBehaviour, IMiniGameManager
             Debug.Log("You lost!");
             GameManager.instance.LoseLife();
             StartCoroutine(HandleGround());
+            GameManager.instance.MiniGameCompleted();
         }
     }
 
