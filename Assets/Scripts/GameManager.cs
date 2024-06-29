@@ -11,7 +11,7 @@ public class GameManager : MonoBehaviour
     public Camera mainCamera;
     public Transform[] miniGamePositions; // Positions for each mini-game
     private int currentMiniGameIndex = 0;
-
+    private float currentTimeLimit;
     private MiniGameUIManager uiManager;
     private static int score = 0; // Static variable to persist score
 
@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         uiManager = FindObjectOfType<MiniGameUIManager>();
+        currentTimeLimit = initialTimeLimit;
         StartNextMiniGame();
     }
 
@@ -44,11 +45,7 @@ public class GameManager : MonoBehaviour
         else
         {
             Debug.Log("All mini-games completed!");
-<<<<<<< Updated upstream
-            // Handle game completion logic here
-=======
             StartCoroutine(RestartWithDelay()); // Add a delay before restarting with reduced timer
->>>>>>> Stashed changes
         }
     }
 
@@ -66,11 +63,6 @@ public class GameManager : MonoBehaviour
 
     private void StartNextMiniGame()
     {
-<<<<<<< Updated upstream
-
-        mainCamera.transform.position = miniGamePositions[currentMiniGameIndex].position;
-        uiManager.SetTimer(initialTimeLimit);
-=======
         if (mainCamera == null)
         {
             mainCamera = Camera.main;
@@ -88,7 +80,6 @@ public class GameManager : MonoBehaviour
         uiManager.SetTimer(currentTimeLimit);
         var currentMiniGame = miniGamePositions[currentMiniGameIndex].GetComponent<IMiniGameManager>();
         currentMiniGame?.StartGame();
->>>>>>> Stashed changes
     }
 
     public void LoseLife()
@@ -99,15 +90,13 @@ public class GameManager : MonoBehaviour
         if (lives <= 0)
         {
             Debug.Log("Game Over!");
+            RestartMiniGames();
+        }
+        else
+        {
+            StartCoroutine(DelayedStartNextMiniGame());
         }
     }
-<<<<<<< Updated upstream
-    public interface IMiniGameManager
-{
-    void StartGame();
-    void EndGame();
-}
-=======
 
     private void ResetMiniGames()
     {
@@ -155,5 +144,4 @@ public class GameManager : MonoBehaviour
     {
         SceneManager.sceneLoaded -= OnSceneLoaded;
     }
->>>>>>> Stashed changes
 }
