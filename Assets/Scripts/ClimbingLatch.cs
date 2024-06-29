@@ -4,7 +4,7 @@ public class ClimbingLatch : MonoBehaviour
 {
     private Vector3 offset;
     private bool dragging = false;
-    public MiniGame6Manager miniGame6Manager; 
+    public MiniGame6Manager miniGame6Manager; // Reference to the mini-game manager
     private LineRenderer lineRenderer;
 
     void Start()
@@ -12,10 +12,10 @@ public class ClimbingLatch : MonoBehaviour
         lineRenderer = gameObject.AddComponent<LineRenderer>();
         lineRenderer.startWidth = 0.1f;
         lineRenderer.endWidth = 0.1f;
-        lineRenderer.positionCount = 2;
         lineRenderer.material = new Material(Shader.Find("Sprites/Default"));
         lineRenderer.startColor = Color.black;
         lineRenderer.endColor = Color.black;
+        lineRenderer.positionCount = 0;
     }
 
     void OnMouseDown()
@@ -32,8 +32,8 @@ public class ClimbingLatch : MonoBehaviour
         {
             Vector3 newPosition = GetMouseWorldPos() + offset;
             transform.position = newPosition;
-            lineRenderer.positionCount = 2;
-            lineRenderer.SetPosition(1, transform.position);
+            lineRenderer.positionCount++;
+            lineRenderer.SetPosition(lineRenderer.positionCount - 1, transform.position);
         }
     }
 
@@ -49,9 +49,14 @@ public class ClimbingLatch : MonoBehaviour
         return Camera.main.ScreenToWorldPoint(mousePoint);
     }
 
+    public void SetMiniGame6Manager(MiniGame6Manager manager)
+    {
+        miniGame6Manager = manager;
+    }
+
     void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("WireEnd"))
+        if (other.CompareTag("Worker"))
         {
             miniGame6Manager.GameOver(true);
         }

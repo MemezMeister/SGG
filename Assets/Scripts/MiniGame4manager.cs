@@ -7,7 +7,7 @@ public class MiniGame4Manager : MonoBehaviour, IMiniGameManager
     public Transform phoneSpawnPoint;
     public GameObject player;
     public float timeLimit = 10f;
-    public MiniGameUIManager uiManager; // Reference to the UI manager
+    public MiniGameUIManager uiManager;
 
     private GameObject currentPhone;
     private float timer;
@@ -73,6 +73,7 @@ public class MiniGame4Manager : MonoBehaviour, IMiniGameManager
         if (won)
         {
             Debug.Log("You won!");
+            GameManager.instance.AddScore(1);
             GameManager.instance.MiniGameCompleted();
         }
         else
@@ -87,5 +88,12 @@ public class MiniGame4Manager : MonoBehaviour, IMiniGameManager
     {
         yield return new WaitForSeconds(2);
         GameManager.instance.MiniGameCompleted();
+    }
+        public void ResetGame()
+    {
+        foreach (Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
     }
 }

@@ -78,7 +78,6 @@ public class Wire : MonoBehaviour
 
     private bool IsValidPosition(Vector3 position)
     {
-        
         if (!insideFuseBox)
         {
             Debug.Log("Position outside fusebox boundaries: " + position);
@@ -94,18 +93,18 @@ public class Wire : MonoBehaviour
 
         if (collision.CompareTag("Obstacle"))
         {
-            Debug.Log("Collision with obstacle detected.");
+            Debug.Log("Collided with obstacle.");
             miniGame2Manager.GameOver(false);
         }
         else if (collision.CompareTag("WireEnd"))
         {
-            Debug.Log("Collision with WireEnd detected.");
+            Debug.Log("Collided with wire end.");
             miniGame2Manager.GameOver(true);
         }
         else if (collision.CompareTag("FuseBox"))
         {
+            Debug.Log("Collided with fuse box.");
             insideFuseBox = true;
-            Debug.Log("Entered fusebox.");
         }
     }
 

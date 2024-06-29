@@ -86,6 +86,7 @@ public class MiniGame5Manager : MonoBehaviour, IMiniGameManager
         if (won)
         {
             Debug.Log("You won!");
+            GameManager.instance.AddScore(1);
             GameManager.instance.MiniGameCompleted();
         }
         else
@@ -100,6 +101,13 @@ public class MiniGame5Manager : MonoBehaviour, IMiniGameManager
     {
         yield return new WaitForSeconds(2);
         GameManager.instance.MiniGameCompleted();
+    }
+        public void ResetGame()
+    {
+        foreach (Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
     }
 }
   

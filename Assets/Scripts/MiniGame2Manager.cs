@@ -1,5 +1,5 @@
 using UnityEngine;
-using System.Collections; // Add this for IEnumerator
+using System.Collections;
 
 public class MiniGame2Manager : MonoBehaviour, IMiniGameManager
 {
@@ -87,6 +87,7 @@ public class MiniGame2Manager : MonoBehaviour, IMiniGameManager
         if (won)
         {
             Debug.Log("You won!");
+            GameManager.instance.AddScore(1);
             GameManager.instance.MiniGameCompleted();
         }
         else
@@ -101,5 +102,22 @@ public class MiniGame2Manager : MonoBehaviour, IMiniGameManager
     {
         yield return new WaitForSeconds(2);
         GameManager.instance.MiniGameCompleted();
+    }
+
+    public void ResetGame()
+    {
+
+        foreach (Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
+        if (uiManager != null)
+        {
+            uiManager.SetTimer(timer);
+            uiManager.SetLives(GameManager.instance.lives);
+        }
+        SpawnObstacles();
+        SpawnWire();
+        gameActive=true;
     }
 }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class GameManager : MonoBehaviour
@@ -10,8 +11,9 @@ public class GameManager : MonoBehaviour
     public Camera mainCamera;
     public Transform[] miniGamePositions; // Positions for each mini-game
     private int currentMiniGameIndex = 0;
-
+    private float currentTimeLimit;
     private MiniGameUIManager uiManager;
+    private static int score = 0; // Static variable to persist score
 
     private void Awake()
     {
@@ -29,6 +31,7 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         uiManager = FindObjectOfType<MiniGameUIManager>();
+        currentTimeLimit = initialTimeLimit;
         StartNextMiniGame();
     }
 
@@ -42,21 +45,41 @@ public class GameManager : MonoBehaviour
         else
         {
             Debug.Log("All mini-games completed!");
-            // Handle game completion logic here
+            StartCoroutine(RestartWithDelay()); 
         }
     }
 
     private IEnumerator DelayedStartNextMiniGame()
     {
-        yield return new WaitForSeconds(2); // 2 seconds delay before starting the next mini-game
+        yield return new WaitForSeconds(2); 
         StartNextMiniGame();
+    }
+
+    private IEnumerator RestartWithDelay()
+    {
+        yield return new WaitForSeconds(2); /
+        ReloadCurrentSceneWithReducedTime();
     }
 
     private void StartNextMiniGame()
     {
+        if (mainCamera == null)
+        {
+            mainCamera = Camera.main;
+        }
 
-        mainCamera.transform.position = miniGamePositions[currentMiniGameIndex].position;
-        uiManager.SetTimer(initialTimeLimit);
+        if (miniGamePositions.Length > currentMiniGameIndex && miniGamePositions[currentMiniGameIndex] != null)
+        {
+            mainCamera.transform.position = miniGamePositions[currentMiniGameIndex].position;
+        }
+        else
+        {
+            Debug.LogError("Mini game position not set or out of bounds.");
+        }
+
+        uiManager.SetTimer(currentTimeLimit);
+        var currentMiniGame = miniGamePositions[currentMiniGameIndex].GetComponent<IMiniGameManager>();
+        currentMiniGame?.StartGame();
     }
 
     public void LoseLife()
@@ -67,11 +90,58 @@ public class GameManager : MonoBehaviour
         if (lives <= 0)
         {
             Debug.Log("Game Over!");
+            RestartMiniGames();
+        }
+        else
+        {
+            StartCoroutine(DelayedStartNextMiniGame());
         }
     }
-    public interface IMiniGameManager
-{
-    void StartGame();
-    void EndGame();
-}
+
+    private void ResetMiniGames()
+    {
+        foreach (var position in miniGamePositions)
+        {
+            var miniGameManager = position.GetComponent<IMiniGameManager>();
+            miniGameManager?.ResetGame();
+        }
+    }
+
+    private void ReloadCurrentSceneWithReducedTime()
+    {
+        currentMiniGameIndex = 0;
+        currentTimeLimit = Mathf.Max(1f, currentTimeLimit - 1f); 
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    private void RestartMiniGames() 
+    {
+        currentMiniGameIndex = 0;
+        currentTimeLimit = initialTimeLimit; 
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void AddScore(int points)
+    {
+        score += points;
+        uiManager.SetScore(score);
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        mainCamera = Camera.main; 
+        uiManager = FindObjectOfType<MiniGameUIManager>();
+        uiManager.SetScore(score); 
+        StartNextMiniGame();
+    }
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
 }

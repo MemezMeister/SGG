@@ -4,4 +4,5 @@ public interface IMiniGameManager
 {
     void StartGame();
     void EndGame();
+    void ResetGame();
 }

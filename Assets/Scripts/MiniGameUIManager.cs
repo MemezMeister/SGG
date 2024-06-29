@@ -5,8 +5,9 @@ public class MiniGameUIManager : MonoBehaviour
 {
     public TextMeshProUGUI livesText;
     public TextMeshProUGUI timerText;
-    public int lives = 3; 
-    private float timer; 
+    public TextMeshProUGUI scoreText;
+    public int lives = 3;
+    private float timer;
 
     private void Start()
     {
@@ -24,6 +25,11 @@ public class MiniGameUIManager : MonoBehaviour
     {
         this.timer = timer;
         UpdateTimerText();
+    }
+
+    public void SetScore(int score)
+    {
+        scoreText.text = "Score: " + score;
     }
 
     private void UpdateLivesText()
@@ -44,8 +50,20 @@ public class MiniGameUIManager : MonoBehaviour
             UpdateTimerText();
             if (timer <= 0)
             {
-                
+                TimerRanOut();
             }
         }
+    }
+
+    private void TimerRanOut()
+    {
+        GameManager.instance.LoseLife(); // Reduce player's life by 1
+        GameManager.instance.MiniGameCompleted(); // Transition to next mini-game
+    }
+
+    public void ResetTimer(float newTimer)
+    {
+        timer = newTimer;
+        UpdateTimerText();
     }
 }
