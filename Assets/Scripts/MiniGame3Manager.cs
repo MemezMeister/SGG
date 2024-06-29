@@ -92,4 +92,13 @@ public class MiniGame3Manager : MonoBehaviour, IMiniGameManager
         yield return new WaitForSeconds(2);
         GameManager.instance.MiniGameCompleted();
     }
+        public void ResetGame()
+    {
+        // Reset game logic
+        // Destroy spawned assets and reset any game-specific variables
+        foreach (Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
+    }
 }

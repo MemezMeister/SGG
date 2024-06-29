@@ -93,4 +93,13 @@ public class MiniGame6Manager : MonoBehaviour, IMiniGameManager
         ground.GetComponent<Collider2D>().isTrigger = false;
         GameManager.instance.MiniGameCompleted();
     }
+        public void ResetGame()
+    {
+        // Reset game logic
+        // Destroy spawned assets and reset any game-specific variables
+        foreach (Transform child in transform)
+        {
+            Destroy(child.gameObject);
+        }
+    }
 }

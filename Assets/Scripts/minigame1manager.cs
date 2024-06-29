@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
-public class MiniGame1Manager : MonoBehaviour
+
+public class MiniGame1Manager : MonoBehaviour, IMiniGameManager
 {
     public GameObject workerWithoutHatPrefab;
     public GameObject workerWithHatPrefab;
@@ -19,17 +20,7 @@ public class MiniGame1Manager : MonoBehaviour
 
     private void Start()
     {
-        timer = timeLimit;
-        if (workerWithoutHatPrefab == null || workerWithHatPrefab == null || brickPrefab == null || workerSpawnPoint == null || brickSpawnPoint == null)
-        {
-            Debug.LogError("One or more references are not assigned in the MiniGame1Manager.");
-            return;
-        }
-        uiManager.SetTimer(timer);
-        uiManager.SetLives(GameManager.instance.lives);
-        SpawnWorker(false);
-        SpawnHats();
-        SpawnBrick();
+        StartGame(); // Start the game on initialization
     }
 
     private void Update()
@@ -58,7 +49,8 @@ public class MiniGame1Manager : MonoBehaviour
             uiManager.SetTimer(timer); // Update timer in UI
             ReplaceWorker(true);
             Debug.Log("You chose the correct hat!");
-            GameManager.instance.MiniGameCompleted();
+            GameManager.instance.AddScore(1); // Add score
+            StartCoroutine(ProceedToNextMiniGame());
         }
         else
         {
@@ -137,7 +129,39 @@ public class MiniGame1Manager : MonoBehaviour
 
     private IEnumerator ProceedToNextMiniGame()
     {
-        yield return new WaitForSeconds(2);
         GameManager.instance.MiniGameCompleted();
+        yield return new WaitForSeconds(2);
+        Destroy(currentWorker);
+        Destroy(currentBrick);
+
+    }
+
+    public void ResetGame()
+    {
+        // Reset game logic
+        // Destroy spawned assets and reset any game-specific variables
+        Debug.Log("Game reset triggered");
+        gameWon = false;
+        StartGame(); // Restart the game logic
+    }
+
+    public void StartGame()
+    {
+        Debug.Log("Game reset starts");
+        timer = timeLimit;
+        if (workerWithoutHatPrefab == null || workerWithHatPrefab == null || brickPrefab == null || workerSpawnPoint == null || brickSpawnPoint == null)
+        {
+            Debug.LogError("One or more references are not assigned in the MiniGame1Manager.");
+            return;
+        }
+        uiManager.SetTimer(timer);
+        uiManager.SetLives(GameManager.instance.lives);
+        SpawnWorker(false);
+        SpawnHats();
+        SpawnBrick();
+    }
+
+    public void EndGame()
+    {
     }
 }
